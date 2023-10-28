@@ -1,0 +1,32 @@
+name: OWASP ZAP DAST Scan
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch as needed
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run OWASP ZAP DAST scan
+        run: |
+          docker pull owasp/zap2docker-stable
+          docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://adminlte.io/themes/v3/index3.html -g gen.conf -r report.html -x report.json
+
+          # Add a spidering process
+          docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t https://adminlte.io/themes/v3/index3.html -g gen.conf -r baseline-report.html -x baseline-report.json
+
+      - name: Upload report as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: zap-reports
+          path: |
+            report.html
+            report.json
+            baseline-report.html
+            baseline-report.json
