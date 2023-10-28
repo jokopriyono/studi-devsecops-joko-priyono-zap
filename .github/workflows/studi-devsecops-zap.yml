@@ -3,7 +3,7 @@ name: OWASP ZAP DAST Scan
 on:
   push:
     branches:
-      - main  # Adjust the branch as needed
+      - master
 
 jobs:
   zap_scan:
