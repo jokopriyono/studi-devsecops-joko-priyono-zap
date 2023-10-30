@@ -16,7 +16,7 @@ jobs:
       - name: Run OWASP ZAP DAST scan
         run: |
           docker pull owasp/zap2docker-stable
-          docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://adminlte.io/themes/v3/index3.html -g gen.conf -r report.html -x report.json
+          docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-quick-scan.py -t https://adminlte.io/themes/v3/index3.html -g gen.conf -r report.html -x report.json
 
           # Add a spidering process
           docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t https://adminlte.io/themes/v3/index3.html -g gen.conf -r baseline-report.html -x baseline-report.json
